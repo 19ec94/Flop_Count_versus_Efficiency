@@ -75,7 +75,7 @@ for (i=0; i<m; i++){
 
 
   FILE *fp;
-  fp = fopen("timeDGEMM.txt", "a");
+  fp = fopen("time.txt", "a");
   fprintf(fp, "%dx%dx%d\t%lf s\t%lf MFLOPS\n", m, n, k, duration, gflops);
   fclose(fp);
 
