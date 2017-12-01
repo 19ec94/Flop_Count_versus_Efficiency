@@ -155,14 +155,14 @@ for(i=0; i<14; i++){
   FILE *fp;
   fp = fopen("timeDGEMM.txt", "a");
   for(i=0; i<14; i++)
-  fprintf(fp, "path[%]d \t%lf s\t%lf TFLOPS \t%lf\n",i,total_duration[i],total_gflops[i],total_no_operation[i]);
-  fprintf("\n");
+  fprintf(fp, "path[%d] \t%lf s\t%lf TFLOPS \t%lf\n",i,total_duration[i],total_gflops[i],total_no_operation[i]);
+  fprintf(fp,"\n");
   fclose(fp);
  FILE *fp1;
   fp1 = fopen("timeDGEMM_f.txt", "a");
   for(i=0; i<56; i++)
   fprintf(fp1, "path[%d] \t%lf s \t%lf  \t%lf TFLOPS\n",i,indv_duration[i],no_operation[i],indv_gflops[i]);
-  fprintf("\n");
+  fprintf(fp1,"\n");
   fclose(fp1);
  */
 
