@@ -3,6 +3,7 @@
 #include "sys/time.h"
 #include "time.h"
 #include "cblas.h"
+#include <string.h>
 #define min(x,y) (((x) < (y)) ? (x) : (y))
 
 double* allocate(int size);
@@ -14,12 +15,19 @@ void printfunc (double* matrix, int row, int col);
 static int mat_size[7]; // stores the matrix sizes
  double indv_duration[64],indv_gflops[64],no_operation[64];
 
+
 int main(int argc, char* argv[])
 {
   int i,j;
   double total_duration[14],total_gflops[14],total_no_operation[14];
+  double min_time=0,  path_minTime=0;
+  double min_flops=0, path_minFlops=0;
+  char *real_paths[] ={"((((A*B)*C)*D)*E)","((A*(B*(C *D)))*E)","(A*(B*(C*(D*E))))","(A*(((B*C)*D)*E))",
+                 "(A*((B*C)*(D*E)))","(A*(B*((C*D)*E)))","(A*((B*(C*D))*E))","((A*B)(C*(D*E)))",
+                 "((A*B)((C*D)*E))","(((A*B)*C)(D*E))","((A*(B*C))*(D*E))","(((A*(B*C))*D)*E)","((A*((B*C)*D))*E)","(((A*B)*(C*D))*E)"};
+  char time_path[20],flop_path[20];
   initialize_zero(total_duration,14);
-  //initialize_zero(total_gflops,14);
+  initialize_zero(total_gflops,14);
   printf("test!\n");
   if(argc<7){
     printf("Input Error\n");
@@ -54,56 +62,56 @@ int main(int argc, char* argv[])
   initialize(D,mat_size[3]*mat_size[4]);
   initialize(E,mat_size[4]*mat_size[5]);
   
-  //Tree 1 - ((((A*B)*C)*D)*E)
+  //Tree 0 - ((((A*B)*C)*D)*E)
   multi(A,B,inter1,&inter1,mat_size[0],mat_size[2],mat_size[1],0);
   multi(inter1,C,inter2,&inter2,mat_size[0],mat_size[3],mat_size[2],1);
   multi(inter2,D,inter3,&inter3,mat_size[0],mat_size[4],mat_size[3],2);
   multi(inter3,E,inter4,&inter4,mat_size[0],mat_size[5],mat_size[4],3); 
 //printfunc(inter4,mat_size[0],mat_size[5]);
- //Tree 2 - ((A*(B*(C *D)))*E)
+ //Tree 1 - ((A*(B*(C *D)))*E)
   multi(C,D,inter1,&inter1,mat_size[2],mat_size[4],mat_size[3],4);
   multi(B,inter1,inter2,&inter2,mat_size[1],mat_size[4],mat_size[2],5);
   multi(A,inter2,inter3,&inter3,mat_size[0],mat_size[4],mat_size[1],6);
   multi(inter3,E,inter4,&inter4,mat_size[0],mat_size[5],mat_size[4],7);
 //printfunc(inter4,mat_size[0],mat_size[5]);
-  //Tree 3 - (A*(B*(C*(D*E))))
+  //Tree 2 - (A*(B*(C*(D*E))))
   multi(D,E,inter1,&inter1,mat_size[3],mat_size[5],mat_size[4],8);
   multi(C,inter1,inter2,&inter2,mat_size[2],mat_size[5],mat_size[3],9);
   multi(B,inter2,inter3,&inter3,mat_size[1],mat_size[5],mat_size[2],10);
   multi(A,inter3,inter4,&inter4,mat_size[0],mat_size[5],mat_size[1],11);
 //printfunc(inter4,mat_size[0],mat_size[5]);
- //Tree 4 - (A*(((B*C)*D)*E))
+ //Tree 3 - (A*(((B*C)*D)*E))
   multi(B,C,inter1,&inter1,mat_size[1],mat_size[3],mat_size[2],12);
   multi(inter1,D,inter2,&inter2,mat_size[1],mat_size[4],mat_size[3],13);
   multi(inter2,E,inter3,&inter3,mat_size[1],mat_size[5],mat_size[4],14);
   multi(A,inter3,inter4,&inter4,mat_size[0],mat_size[5],mat_size[1],15); 
 //printfunc(inter4,mat_size[0],mat_size[5]);
-  //Tree 5 - (A*((B*C)*(D*E)))
+  //Tree 4 - (A*((B*C)*(D*E)))
   multi(B,C,inter1,&inter1,mat_size[1],mat_size[3],mat_size[2],16);
   multi(D,E,inter2,&inter2,mat_size[3],mat_size[5],mat_size[4],17);
   multi(inter1,inter2,inter3,&inter3,mat_size[1],mat_size[5],mat_size[3],18);
   multi(A,inter3,inter4,&inter4,mat_size[0],mat_size[5],mat_size[1],19); 
  //printfunc(inter4,mat_size[0],mat_size[5]);
-  //Tree 6 - (A*(B*((C*D)*E)))
-  multi(C,D,inter1,&inter1,mat_size[2],mat_size[4],mat_size[3],20);
+  //Tree 5 - (A*(B*((C*D)*E)))
+  multi(C,D,inter1,&inter1,mat_size[2],mat_size[4],mat_size[3],20);  
   multi(inter1,E,inter2,&inter2,mat_size[2],mat_size[5],mat_size[4],21);
   multi(B,inter2,inter3,&inter3,mat_size[1],mat_size[5],mat_size[2],22);
   multi(A,inter3,inter4,&inter4,mat_size[0],mat_size[5],mat_size[1],23); 
 //printfunc(inter4,mat_size[0],mat_size[5]);
-  //Tree 7 - (A*((B*(C*D))*E))
+  //Tree 6 - (A*((B*(C*D))*E))
   multi(C,D,inter1,&inter1,mat_size[2],mat_size[4],mat_size[3],24);
   multi(B,inter1,inter2,&inter2,mat_size[1],mat_size[4],mat_size[2],25);
   multi(inter2,E,inter3,&inter3,mat_size[1],mat_size[5],mat_size[4],26);
   multi(A,inter3,inter4,&inter4,mat_size[0],mat_size[5],mat_size[1],27); 
  //printfunc(inter4,mat_size[0],mat_size[5]);
- //Tree 8 - ((A*B)(C*(D*E)))
+ //Tree 7 - ((A*B)(C*(D*E)))
   multi(A,B,inter1,&inter1,mat_size[0],mat_size[2],mat_size[1],28);
   multi(D,E,inter2,&inter2,mat_size[3],mat_size[5],mat_size[4],29);
   multi(C,inter2,inter3,&inter3,mat_size[2],mat_size[5],mat_size[3],30);
   multi(inter1,inter3,inter4,&inter4,mat_size[0],mat_size[5],mat_size[2],31); 
    
 //printfunc(inter4,mat_size[0],mat_size[5]);
- //Tree 9 - ((A*B)((C*D)*E))
+ //Tree 8 - ((A*B)((C*D)*E))
   multi(A,B,inter1,&inter1,mat_size[0],mat_size[2],mat_size[1],32);
   multi(C,D,inter2,&inter2,mat_size[2],mat_size[4],mat_size[3],33);
   multi(inter2,E,inter3,&inter3,mat_size[2],mat_size[5],mat_size[4],34); 
@@ -111,32 +119,32 @@ int main(int argc, char* argv[])
   
  //printfunc(inter4,mat_size[0],mat_size[5]);
 
-  //Tree 10 - (((A*B)*C)(D*E))
+  //Tree 9 - (((A*B)*C)(D*E))
   multi(A,B,inter1,&inter1,mat_size[0],mat_size[2],mat_size[1],36);
   multi(D,E,inter2,&inter2,mat_size[3],mat_size[5],mat_size[4],37);
   multi(inter1,C,inter3,&inter3,mat_size[0],mat_size[3],mat_size[2],38);
   multi(inter3,inter2,inter4,&inter4,mat_size[0],mat_size[5],mat_size[3],39); 
  //printfunc(inter4,mat_size[0],mat_size[5]);
- //Tree 11 - ((A*(B*C))*(D*E))
+ //Tree 10 - ((A*(B*C))*(D*E))
  multi(B,C,inter1,&inter1,mat_size[1],mat_size[3],mat_size[2],40);
   multi(D,E,inter2,&inter2,mat_size[3],mat_size[5],mat_size[4],41);
   multi(A,inter1,inter3,&inter3,mat_size[0],mat_size[3],mat_size[1],42);
   multi(inter3,inter2,inter4,&inter4,mat_size[0],mat_size[5],mat_size[3],43); 
  // printfunc(inter4,mat_size[0],mat_size[5]);
  
-//Tree 12 - (((A*(B*C))*D)*E)
+//Tree 11 - (((A*(B*C))*D)*E)
   multi(B,C,inter1,&inter1,mat_size[1],mat_size[3],mat_size[2],44);
   multi(A,inter1,inter2,&inter2,mat_size[0],mat_size[3],mat_size[1],45);
   multi(inter2,D,inter3,&inter3,mat_size[0],mat_size[4],mat_size[3],46);
   multi(inter3,E,inter4,&inter4,mat_size[0],mat_size[5],mat_size[4],47); 
 //printfunc(inter4,mat_size[0],mat_size[5]);
-//Tree 13 - ((A*((B*C)*D))*E)
+//Tree 12 - ((A*((B*C)*D))*E)
   multi(B,C,inter1,&inter1,mat_size[1],mat_size[3],mat_size[2],48);
   multi(inter1,D,inter2,&inter2,mat_size[1],mat_size[4],mat_size[3],49);
   multi(A,inter2,inter3,&inter3,mat_size[0],mat_size[4],mat_size[1],50);
   multi(inter3,E,inter4,&inter4,mat_size[0],mat_size[5],mat_size[4],51); 
  //printfunc(inter4,mat_size[0],mat_size[5]);
- //Tree 14 - (((A*B)*(C*D))*E)
+ //Tree 13 - (((A*B)*(C*D))*E)
   multi(A,B,inter1,&inter1,mat_size[0],mat_size[2],mat_size[1],52);
   multi(C,D,inter2,&inter2,mat_size[2],mat_size[4],mat_size[3],53);
   multi(inter1,inter2,inter3,&inter3,mat_size[0],mat_size[4],mat_size[2],54); 
@@ -148,32 +156,50 @@ for(i=0; i<14; i++){
   total_duration[i] = indv_duration[4*i]+indv_duration[4*i+1]+indv_duration[4*i+2]+indv_duration[4*i+3];
   total_no_operation[i] = no_operation[4*i]+ no_operation[4*i+1]+ no_operation[4*i+2]+ no_operation[4*i+3];
   total_gflops[i] = total_no_operation[i]/total_duration[i];
-//total_gflops[i] =  (no_operation[4*i]+ no_operation[4*i+1]+ no_operation[4*i+2]+ no_operation[4*i+3])/( indv_duration[4*i]+indv_duration[4*i+1]+indv_duration[4*i+2]+indv_duration[4*i+3]);
-  
 }
-/*
-  FILE *fp;
+  int time_index =0;
+  int flop_index =0;
+ min_time =total_duration[0];
+  for (i=1; i<14; i++){
+    if(total_duration[i] <=min_time){
+      min_time =total_duration[i];
+      time_index =i;
+    }
+  }
+ min_flops =total_no_operation[0];
+for (i=1; i<14; i++){
+  if(total_no_operation[i] <=min_flops){
+    min_flops =total_no_operation[i];
+    flop_index=i;
+  }
+}
+
+double deviation=0;
+deviation = ( total_duration[flop_index] -total_duration[time_index] )/total_duration[time_index];
+strcpy(time_path,real_paths[time_index]);
+strcpy(flop_path,real_paths[flop_index]);
+
+FILE *fp;
   fp = fopen("timeDGEMM.txt", "a");
   for(i=0; i<14; i++)
-  fprintf(fp, "path[%d] \t%lf s\t%lf TFLOPS \t%lf\n",i,total_duration[i],total_gflops[i],total_no_operation[i]);
+ fprintf(fp,"path[%d] \t%lf s\t%lf TFLOPS \t%lf\n",i,total_duration[i],total_gflops[i],total_no_operation[i]);
   fprintf(fp,"\n");
+ fprintf(fp," min_time =%f  \n",min_time );
+  fprintf(fp,"min_flops =%f  and takes %f s \n",min_flops,total_duration[flop_index]);
+  fprintf(fp,"deviation is =%f \n",deviation);
   fclose(fp);
- FILE *fp1;
-  fp1 = fopen("timeDGEMM_f.txt", "a");
-  for(i=0; i<56; i++)
-  fprintf(fp1, "path[%d] \t%lf s \t%lf  \t%lf TFLOPS\n",i,indv_duration[i],no_operation[i],indv_gflops[i]);
-  fprintf(fp1,"\n");
-  fclose(fp1);
- */
-
- for(i=0; i<14; i++)
-  printf("path[%d] \t%lf s\t%lf TFLOPS \t%lf\n",i,total_duration[i],total_gflops[i],total_no_operation[i]);
-  printf("\n");
  
-/*  for(i=0; i<56; i++)
-  printf("path[%d] \t%lf s \t%lf  \t%lf MFLOPS\n",i,indv_duration[i],no_operation[i],indv_gflops[i]);
+
+for(i=0; i<14; i++)
+ printf("path[%d] \t%lf s\t%lf TFLOPS \t%lf\n",i,total_duration[i],total_gflops[i],total_no_operation[i]);
   printf("\n");
-*/
+ printf(" min_time =%f  \n",min_time );
+  printf("min_flops =%f  and takes %f s \n",min_flops,total_duration[flop_index]);
+  printf("deviation is =%f \n",deviation);
+
+
+
+
   free(A);
   free(B);
   free(C);
