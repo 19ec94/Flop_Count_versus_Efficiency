@@ -12,8 +12,9 @@ void initialize( double* locptr, int size);
 void multi(double* A,double*B, double*inter1, double **tempptr,int m, int n, int k,int tt );
 void printfunc (double* matrix, int row, int col);
 
+
 static int mat_size[7]; // stores the matrix sizes
- double indv_duration[64],indv_gflops[64],no_operation[64];
+double indv_duration[64],indv_gflops[64],no_operation[64];
 
 
 int main(int argc, char* argv[])
@@ -44,9 +45,9 @@ int main(int argc, char* argv[])
   mat_size[4] = atoi(argv[5]);// column of matrix D and row of matrix E
   mat_size[5] = atoi(argv[6]);// column of matrix E and column of result matrix 
   
-  //struct timeval start,finish;
+ 
   
-  double *A,*B,*C,*D,*E,*inter1=NULL,*inter2=NULL,*inter3=NULL,*inter4=NULL;
+  double *A,*B,*C,*D,*E,*inter1=NULL,*inter2=NULL,*inter3=NULL,*inter4=NULL,*dummy_a,*dummy_b,*dummy_c;
  
   //Allocate memeory for main matrices 
   A=allocate(mat_size[0]*mat_size[1]);
@@ -54,104 +55,154 @@ int main(int argc, char* argv[])
   C=allocate(mat_size[2]*mat_size[3]);
   D=allocate(mat_size[3]*mat_size[4]);
   E=allocate(mat_size[4]*mat_size[5]);
-  //initialize matrices with random values
+  dummy_a=allocate(2000*2000);
+  dummy_b=allocate(2000*2000);
+  dummy_c=allocate(2000*2000);
+  
+//initialize matrices with random values
   srand((unsigned)time(NULL));
   initialize(A,mat_size[0]*mat_size[1]);
   initialize(B,mat_size[1]*mat_size[2]);
   initialize(C,mat_size[2]*mat_size[3]);
   initialize(D,mat_size[3]*mat_size[4]);
   initialize(E,mat_size[4]*mat_size[5]);
-  
-  //Tree 0 - ((((A*B)*C)*D)*E)
+  initialize(dummy_a,2000*2000);
+  initialize(dummy_b,2000*2000);
+  initialize(dummy_c,2000*2000);
+ int  m =2000;
+ int  n= 2000;
+ int k =2000;
+ cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);  
+
+  //Path 0 - ((((A*B)*C)*D)*E)
   multi(A,B,inter1,&inter1,mat_size[0],mat_size[2],mat_size[1],0);
   multi(inter1,C,inter2,&inter2,mat_size[0],mat_size[3],mat_size[2],1);
   multi(inter2,D,inter3,&inter3,mat_size[0],mat_size[4],mat_size[3],2);
   multi(inter3,E,inter4,&inter4,mat_size[0],mat_size[5],mat_size[4],3); 
 //printfunc(inter4,mat_size[0],mat_size[5]);
- //Tree 1 - ((A*(B*(C *D)))*E)
+cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
+
+ //path 1 - ((A*(B*(C *D)))*E)
   multi(C,D,inter1,&inter1,mat_size[2],mat_size[4],mat_size[3],4);
   multi(B,inter1,inter2,&inter2,mat_size[1],mat_size[4],mat_size[2],5);
   multi(A,inter2,inter3,&inter3,mat_size[0],mat_size[4],mat_size[1],6);
   multi(inter3,E,inter4,&inter4,mat_size[0],mat_size[5],mat_size[4],7);
 //printfunc(inter4,mat_size[0],mat_size[5]);
-  //Tree 2 - (A*(B*(C*(D*E))))
+
+cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
+  //path 2 - (A*(B*(C*(D*E))))
   multi(D,E,inter1,&inter1,mat_size[3],mat_size[5],mat_size[4],8);
   multi(C,inter1,inter2,&inter2,mat_size[2],mat_size[5],mat_size[3],9);
   multi(B,inter2,inter3,&inter3,mat_size[1],mat_size[5],mat_size[2],10);
   multi(A,inter3,inter4,&inter4,mat_size[0],mat_size[5],mat_size[1],11);
 //printfunc(inter4,mat_size[0],mat_size[5]);
- //Tree 3 - (A*(((B*C)*D)*E))
+
+
+
+cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
+ //path 3 - (A*(((B*C)*D)*E))
   multi(B,C,inter1,&inter1,mat_size[1],mat_size[3],mat_size[2],12);
   multi(inter1,D,inter2,&inter2,mat_size[1],mat_size[4],mat_size[3],13);
   multi(inter2,E,inter3,&inter3,mat_size[1],mat_size[5],mat_size[4],14);
   multi(A,inter3,inter4,&inter4,mat_size[0],mat_size[5],mat_size[1],15); 
 //printfunc(inter4,mat_size[0],mat_size[5]);
-  //Tree 4 - (A*((B*C)*(D*E)))
+
+
+cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
+  //path 4 - (A*((B*C)*(D*E)))
   multi(B,C,inter1,&inter1,mat_size[1],mat_size[3],mat_size[2],16);
   multi(D,E,inter2,&inter2,mat_size[3],mat_size[5],mat_size[4],17);
   multi(inter1,inter2,inter3,&inter3,mat_size[1],mat_size[5],mat_size[3],18);
   multi(A,inter3,inter4,&inter4,mat_size[0],mat_size[5],mat_size[1],19); 
  //printfunc(inter4,mat_size[0],mat_size[5]);
-  //Tree 5 - (A*(B*((C*D)*E)))
+
+
+cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
+  //path 5 - (A*(B*((C*D)*E)))
   multi(C,D,inter1,&inter1,mat_size[2],mat_size[4],mat_size[3],20);  
   multi(inter1,E,inter2,&inter2,mat_size[2],mat_size[5],mat_size[4],21);
   multi(B,inter2,inter3,&inter3,mat_size[1],mat_size[5],mat_size[2],22);
   multi(A,inter3,inter4,&inter4,mat_size[0],mat_size[5],mat_size[1],23); 
 //printfunc(inter4,mat_size[0],mat_size[5]);
-  //Tree 6 - (A*((B*(C*D))*E))
+
+
+
+cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
+  //path 6 - (A*((B*(C*D))*E))
   multi(C,D,inter1,&inter1,mat_size[2],mat_size[4],mat_size[3],24);
   multi(B,inter1,inter2,&inter2,mat_size[1],mat_size[4],mat_size[2],25);
   multi(inter2,E,inter3,&inter3,mat_size[1],mat_size[5],mat_size[4],26);
   multi(A,inter3,inter4,&inter4,mat_size[0],mat_size[5],mat_size[1],27); 
  //printfunc(inter4,mat_size[0],mat_size[5]);
- //Tree 7 - ((A*B)(C*(D*E)))
+
+
+
+cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
+ //path 7 - ((A*B)(C*(D*E)))
   multi(A,B,inter1,&inter1,mat_size[0],mat_size[2],mat_size[1],28);
   multi(D,E,inter2,&inter2,mat_size[3],mat_size[5],mat_size[4],29);
   multi(C,inter2,inter3,&inter3,mat_size[2],mat_size[5],mat_size[3],30);
   multi(inter1,inter3,inter4,&inter4,mat_size[0],mat_size[5],mat_size[2],31); 
-   
-//printfunc(inter4,mat_size[0],mat_size[5]);
- //Tree 8 - ((A*B)((C*D)*E))
+ //printfunc(inter4,mat_size[0],mat_size[5]);
+
+
+
+cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
+ //path 8 - ((A*B)((C*D)*E))
   multi(A,B,inter1,&inter1,mat_size[0],mat_size[2],mat_size[1],32);
   multi(C,D,inter2,&inter2,mat_size[2],mat_size[4],mat_size[3],33);
   multi(inter2,E,inter3,&inter3,mat_size[2],mat_size[5],mat_size[4],34); 
   multi(inter1,inter3,inter4,&inter4,mat_size[0],mat_size[5],mat_size[2],35); 
-  
- //printfunc(inter4,mat_size[0],mat_size[5]);
+//printfunc(inter4,mat_size[0],mat_size[5]);
 
-  //Tree 9 - (((A*B)*C)(D*E))
+
+cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
+  //path 9 - (((A*B)*C)(D*E))
   multi(A,B,inter1,&inter1,mat_size[0],mat_size[2],mat_size[1],36);
   multi(D,E,inter2,&inter2,mat_size[3],mat_size[5],mat_size[4],37);
   multi(inter1,C,inter3,&inter3,mat_size[0],mat_size[3],mat_size[2],38);
   multi(inter3,inter2,inter4,&inter4,mat_size[0],mat_size[5],mat_size[3],39); 
  //printfunc(inter4,mat_size[0],mat_size[5]);
- //Tree 10 - ((A*(B*C))*(D*E))
+
+cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
+ //path 10 - ((A*(B*C))*(D*E))
  multi(B,C,inter1,&inter1,mat_size[1],mat_size[3],mat_size[2],40);
   multi(D,E,inter2,&inter2,mat_size[3],mat_size[5],mat_size[4],41);
   multi(A,inter1,inter3,&inter3,mat_size[0],mat_size[3],mat_size[1],42);
   multi(inter3,inter2,inter4,&inter4,mat_size[0],mat_size[5],mat_size[3],43); 
  // printfunc(inter4,mat_size[0],mat_size[5]);
  
-//Tree 11 - (((A*(B*C))*D)*E)
+
+
+cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
+//path 11 - (((A*(B*C))*D)*E)
   multi(B,C,inter1,&inter1,mat_size[1],mat_size[3],mat_size[2],44);
   multi(A,inter1,inter2,&inter2,mat_size[0],mat_size[3],mat_size[1],45);
   multi(inter2,D,inter3,&inter3,mat_size[0],mat_size[4],mat_size[3],46);
   multi(inter3,E,inter4,&inter4,mat_size[0],mat_size[5],mat_size[4],47); 
 //printfunc(inter4,mat_size[0],mat_size[5]);
-//Tree 12 - ((A*((B*C)*D))*E)
+
+
+
+cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
+//path 12 - ((A*((B*C)*D))*E)
   multi(B,C,inter1,&inter1,mat_size[1],mat_size[3],mat_size[2],48);
   multi(inter1,D,inter2,&inter2,mat_size[1],mat_size[4],mat_size[3],49);
   multi(A,inter2,inter3,&inter3,mat_size[0],mat_size[4],mat_size[1],50);
   multi(inter3,E,inter4,&inter4,mat_size[0],mat_size[5],mat_size[4],51); 
  //printfunc(inter4,mat_size[0],mat_size[5]);
- //Tree 13 - (((A*B)*(C*D))*E)
+
+
+cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
+ //path 13 - (((A*B)*(C*D))*E)
   multi(A,B,inter1,&inter1,mat_size[0],mat_size[2],mat_size[1],52);
   multi(C,D,inter2,&inter2,mat_size[2],mat_size[4],mat_size[3],53);
   multi(inter1,inter2,inter3,&inter3,mat_size[0],mat_size[4],mat_size[2],54); 
   multi(inter3,E,inter4,&inter4,mat_size[0],mat_size[5],mat_size[4],55); 
- 
-//printfunc(inter4,mat_size[0],mat_size[5]);
- 
+ //printfunc(inter4,mat_size[0],mat_size[5]);
+ cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
+
+
 for(i=0; i<14; i++){
   total_duration[i] = indv_duration[4*i]+indv_duration[4*i+1]+indv_duration[4*i+2]+indv_duration[4*i+3];
   total_no_operation[i] = no_operation[4*i]+ no_operation[4*i+1]+ no_operation[4*i+2]+ no_operation[4*i+3];
@@ -173,6 +224,9 @@ for (i=1; i<14; i++){
     flop_index=i;
   }
 }
+//flop_index =5;
+//time_index =6;
+
 
 double deviation=0;
 deviation = ( total_duration[flop_index] -total_duration[time_index] )/total_duration[time_index];
@@ -180,7 +234,7 @@ strcpy(time_path,real_paths[time_index]);
 strcpy(flop_path,real_paths[flop_index]);
 
 FILE *fp;
-  fp = fopen("timeDGEMM.txt", "a");
+  fp = fopen("result.txt", "a");
   for(i=0; i<14; i++)
  fprintf(fp,"path[%d] \t%lf s\t%lf TFLOPS \t%lf\n",i,total_duration[i],total_gflops[i],total_no_operation[i]);
   fprintf(fp,"\n");
@@ -193,8 +247,8 @@ FILE *fp;
 for(i=0; i<14; i++)
  printf("path[%d] \t%lf s\t%lf TFLOPS \t%lf\n",i,total_duration[i],total_gflops[i],total_no_operation[i]);
   printf("\n");
- printf(" min_time =%f  \n",min_time );
-  printf("min_flops =%f  and takes %f s \n",min_flops,total_duration[flop_index]);
+ printf(" path[%d] min_time =%f  \n",time_index,min_time );
+  printf("path[%d] min_flops =%f  and takes %f s \n",flop_index,min_flops,total_duration[flop_index]);
   printf("deviation is =%f \n",deviation);
 
 
@@ -209,10 +263,33 @@ for(i=0; i<14; i++)
   free(inter2);
   free(inter3);
   free(inter4);
-  printf("Everything is successful\n");
+  free(dummy_a);
+  free(dummy_b);
+  free(dummy_c);
+printf("Everything is successful\n");
   return 0;
 }
+double* allocate(int size){
+    
+    double* locptr = (double* )malloc(sizeof(double) * size);
+      if (locptr == NULL){
+           printf("Memory is not alloacted \n");
+      }
+      return locptr;
+ }
 
+void initialize(double *locptr, int size){
+       int i; 
+    for (i=0; i<size; i++)
+    locptr[i] =1.0;
+    return ;
+}
+void initialize_zero(double *locptr,int size){
+    int i; 
+    for (i=0; i<size; i++)
+    locptr[i] = 0;
+    return ;
+ }
 
 void printfunc (double* matrix, int row, int col){
   int i, j;
