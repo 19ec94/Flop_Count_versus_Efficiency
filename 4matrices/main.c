@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
 {
   int i,j;
   double total_duration[6],total_gflops[6],total_no_operation[6];
-  char *real_paths[] ={"(((A*B)*C)*D)","((A*(B*(C *D)))","(A*((B*C)*D))","(A*(B*C))*D)","((A*B)*(C*D))"};
+  char *all_paths[] ={"(((A*B)*C)*D)","((A*(B*(C *D)))","(A*((B*C)*D))","(A*(B*C))*D)","((A*B)*(C*D))"};
   char time_path[20],flop_path[20];
   initialize_zero(total_duration,6);
   initialize_zero(total_gflops,6);
@@ -161,8 +161,8 @@ int main(int argc, char* argv[])
 
   double deviation=0;                                                                                                     //deviation (min_time -time of min_flop)/min_time
   deviation = ( total_duration[flop_index] -total_duration[time_index] )/total_duration[time_index];
-  strcpy(time_path,real_paths[time_index]);
-  strcpy(flop_path,real_paths[flop_index]);
+  strcpy(time_path,all_paths[time_index]);
+  strcpy(flop_path,all_paths[flop_index]);
 
   if(OUTPUT_in_FILE !=0){
   FILE *fp;                                                                                                                 //writes output to a fil
@@ -184,8 +184,6 @@ if (OUTPUT_on_SCREEN !=0){
   printf("path[%d] min_flops =%f  and takes %f s \n",flop_index,min_flops,total_duration[flop_index]);
   printf("deviation is =%f \n",deviation);
 }
-
-
 
   free(A);
   free(B);

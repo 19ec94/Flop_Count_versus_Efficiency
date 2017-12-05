@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
   double total_duration[3],total_gflops[3],total_no_operation[3];
   double min_time=0,  path_minTime=0;
   double min_flops=0, path_minFlops=0;
-  char *real_paths[]={"((A*B)*C)","(A*(B*C))"};
+  char *all_paths[]={"((A*B)*C)","(A*(B*C))"};
   char time_path[20],flop_path[20];
   initialize_zero(total_duration,3);
   initialize_zero(total_gflops,3);
@@ -112,8 +112,8 @@ int main(int argc, char* argv[])
 
   double deviation=0;                                                                   //calculates the deviation between min_time & time of min_flop
   deviation = ( total_duration[flop_index] -total_duration[time_index] )/total_duration[time_index];
-  //strcpy(time_path,real_paths[time_index]);
-  //strcpy(flop_path,real_paths[flop_index]);
+  strcpy(time_path,all_paths[time_index]);
+  strcpy(flop_path,all_paths[flop_index]);
 
 if (OUTPUT_in_FILE !=0){
   FILE *fp;                                                                            //write output to a file "result.txt"

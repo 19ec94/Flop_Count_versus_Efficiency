@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
 {
   int i,j;
   double total_duration[14],total_gflops[14],total_no_operation[14];                                                   //stores values for each paths
-  char *real_paths[] ={"((((A*B)*C)*D)*E)","((A*(B*(C *D)))*E)","(A*(B*(C*(D*E))))","(A*(((B*C)*D)*E))",
+  char *all_paths[] ={"((((A*B)*C)*D)*E)","((A*(B*(C *D)))*E)","(A*(B*(C*(D*E))))","(A*(((B*C)*D)*E))",
                  "(A*((B*C)*(D*E)))","(A*(B*((C*D)*E)))","(A*((B*(C*D))*E))","((A*B)(C*(D*E)))",
                  "((A*B)((C*D)*E))","(((A*B)*C)(D*E))","((A*(B*C))*(D*E))","(((A*(B*C))*D)*E)","((A*((B*C)*D))*E)","(((A*B)*(C*D))*E)"};
   char time_path[20],flop_path[20];
@@ -261,8 +261,8 @@ int main(int argc, char* argv[])
 
   double deviation=0;                                                                                                               //deviation = (min_time - timeof min_flop path)/min_time
   deviation = ( total_duration[flop_index] -total_duration[time_index] )/total_duration[time_index];
-  strcpy(time_path,real_paths[time_index]);
-  strcpy(flop_path,real_paths[flop_index]);
+  strcpy(time_path,all_paths[time_index]);
+  strcpy(flop_path,all_paths[flop_index]);
 
 if (OUTPUT_in_FILE !=0){
   FILE *fp;                                                                                                                         //writes output to a file 
