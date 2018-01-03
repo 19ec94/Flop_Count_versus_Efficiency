@@ -85,7 +85,7 @@ int main(int argc, char* argv[])
   initialize(dummy_b,n*k);
   initialize(dummy_c,k*m);
 
-int my_iteration = 10;
+int my_iteration = 5;
 double inter_min_time ;
 for(i=0; i<my_iteration;  i++){
  //Path 0 - ((((A*B)*C)*D)*E)             
@@ -241,14 +241,14 @@ for(i=0; i<56; i++) {
   }
 }
 
-/*
+
 for(i=0; i<56; i++){
  for(j=0; j<my_iteration; j++){  
 printf("%f \t",dummy_indv_duration[i][j]);
 }
 printf("%f %d \n",indv_duration [i],i);
 }
-
+/*
 for(i=0; i<56; i++){
  for(j=0; j<my_iteration; j++){  
 printf("%f \t",dummy_no_operation[i][j]);

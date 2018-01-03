@@ -22,7 +22,7 @@
 #define min(x,y) (((x) < (y)) ? (x) : (y))
 #define OUTPUT_in_FILE 0    //change it to 1, if output needs be written in a file
 #define OUTPUT_on_SCREEN 1  //change it to Zero (0) , if you don't want to print it on screen
-#define MATRIX 1            //change it to 1, if you want to check for the final matrix of each path
+#define MATRIX 0            //change it to 1, if you want to check for the final matrix of each path
 
 double* allocate(int size);                                                                                           //alloacte memory for matrices
 void initialize_zero(double *locptr,int size);                                                                        //initialize matrices to zero
@@ -38,7 +38,7 @@ double dummy_indv_duration[64][30],indv_gflops[64],dummy_no_operation[64],indv_d
 
 int main(int argc, char* argv[])
 {
-  int i,j,my_iteration=10;
+  int i,j,my_iteration=1;
   double total_duration[14],total_gflops[14],total_no_operation[14];                                                   //stores values for each paths
   char *all_paths[] ={"((((A*B)*C)*D)*E)","((A*(B*(C *D)))*E)","(A*(B*(C*(D*E))))","(A*(((B*C)*D)*E))",
                  "(A*((B*C)*(D*E)))","(A*(B*((C*D)*E)))","(A*((B*(C*D))*E))","((A*B)(C*(D*E)))",
@@ -437,7 +437,7 @@ for(i=0; i<14; i++) {
   }
 }
 
-/*
+
   for(i=0; i<14; i++){
     for(j=0; j<my_iteration; j++){  
     printf("%f \t",dummy_indv_duration[i][j]);
@@ -446,9 +446,9 @@ for(i=0; i<14; i++) {
     printf("%f %d \n",indv_duration [i],i);
   }
 
-  for(i=0; i<14; i++)
-  printf("%f \n",dummy_no_operation[i]);
-*/
+  //for(i=0; i<14; i++)
+  //printf("%f \n",dummy_no_operation[i]);
+
 
 
 
