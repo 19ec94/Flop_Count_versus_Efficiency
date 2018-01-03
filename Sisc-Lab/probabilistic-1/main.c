@@ -98,12 +98,7 @@ double inter_min_time ;
    
   for(i=0; i<my_iteration;  i++){
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n); 
-  /* 
-  multi(A,B,inter1,&inter1,mat_size[0],mat_size[2],mat_size[1],0,i);
-  multi(inter1,C,inter2,&inter2,mat_size[0],mat_size[3],mat_size[2],1,i);
-  multi(inter2,D,inter3,&inter3,mat_size[0],mat_size[4],mat_size[3],2,i);
-  multi(inter3,E,inter4,&inter4,mat_size[0],mat_size[5],mat_size[4],3,i); 
-  */
+ 
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[0],mat_size[2],mat_size[1],1.0,A,mat_size[1],B,mat_size[2],0.0,inter1,mat_size[2]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[0],mat_size[3],mat_size[2],1.0,inter1,mat_size[2],C,mat_size[3],0.0,inter2,mat_size[3]);
@@ -127,11 +122,7 @@ double inter_min_time ;
 
   for(i=0; i<my_iteration;  i++){
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
-  /* 
-  multi(C,D,inter1,&inter1,mat_size[2],mat_size[4],mat_size[3],4,i);
-  multi(B,inter1,inter2,&inter2,mat_size[1],mat_size[4],mat_size[2],5,i);
-  multi(A,inter2,inter3,&inter3,mat_size[0],mat_size[4],mat_size[1],6,i);
-  multi(inter3,E,inter4,&inter4,mat_size[0],mat_size[5],mat_size[4],7,i); */
+ 
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[2],mat_size[4],mat_size[3],1.0,C,mat_size[3],D,mat_size[4],0.0,inter1,mat_size[4]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[1],mat_size[4],mat_size[2],1.0,B,mat_size[2],inter1,mat_size[4],0.0,inter2,mat_size[4]);
@@ -154,10 +145,7 @@ double inter_min_time ;
 
   for(i=0; i<my_iteration;  i++){
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
-  /*multi(D,E,inter1,&inter1,mat_size[3],mat_size[5],mat_size[4],8,i);
-  multi(C,inter1,inter2,&inter2,mat_size[2],mat_size[5],mat_size[3],9,i);
-  multi(B,inter2,inter3,&inter3,mat_size[1],mat_size[5],mat_size[2],10,i);
-  multi(A,inter3,inter4,&inter4,mat_size[0],mat_size[5],mat_size[1],11,i);*/
+  
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[3],mat_size[5],mat_size[4],1.0,D,mat_size[4],E,mat_size[5],0.0,inter1,mat_size[5]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[2],mat_size[5],mat_size[3],1.0,C,mat_size[3],inter1,mat_size[5],0.0,inter2,mat_size[5]);
@@ -181,10 +169,7 @@ double inter_min_time ;
 
   for(i=0; i<my_iteration;  i++){
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
-  /*multi(B,C,inter1,&inter1,mat_size[1],mat_size[3],mat_size[2],12,i);
-  multi(inter1,D,inter2,&inter2,mat_size[1],mat_size[4],mat_size[3],13,i);
-  multi(inter2,E,inter3,&inter3,mat_size[1],mat_size[5],mat_size[4],14,i);
-  multi(A,inter3,inter4,&inter4,mat_size[0],mat_size[5],mat_size[1],15,i);*/ 
+  
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[1],mat_size[3],mat_size[2],1.0,B,mat_size[2],C,mat_size[3],0.0,inter1,mat_size[3]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[1],mat_size[4],mat_size[3],1.0,inter1,mat_size[3],D,mat_size[4],0.0,inter2,mat_size[4]);
@@ -210,10 +195,7 @@ double inter_min_time ;
 
   for(i=0; i<my_iteration;  i++){
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
-  /*multi(B,C,inter1,&inter1,mat_size[1],mat_size[3],mat_size[2],16,i);
-  multi(D,E,inter2,&inter2,mat_size[3],mat_size[5],mat_size[4],17,i);
-  multi(inter1,inter2,inter3,&inter3,mat_size[1],mat_size[5],mat_size[3],18,i);
-  multi(A,inter3,inter4,&inter4,mat_size[0],mat_size[5],mat_size[1],19,i);*/ 
+  
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[1],mat_size[3],mat_size[2],1.0,B,mat_size[2],C,mat_size[3],0.0,inter1,mat_size[3]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[3],mat_size[5],mat_size[4],1.0,D,mat_size[4],E,mat_size[5],0.0,inter2,mat_size[5]);
@@ -236,10 +218,7 @@ double inter_min_time ;
 
   for(i=0; i<my_iteration;  i++){
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
-  /*multi(C,D,inter1,&inter1,mat_size[2],mat_size[4],mat_size[3],20,i);  
-  multi(inter1,E,inter2,&inter2,mat_size[2],mat_size[5],mat_size[4],21,i);
-  multi(B,inter2,inter3,&inter3,mat_size[1],mat_size[5],mat_size[2],22,i);
-  multi(A,inter3,inter4,&inter4,mat_size[0],mat_size[5],mat_size[1],23,i);*/ 
+  
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[2],mat_size[4],mat_size[3],1.0,C,mat_size[3],D,mat_size[4],0.0,inter1,mat_size[4]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[2],mat_size[5],mat_size[4],1.0,inter1,mat_size[4],E,mat_size[5],0.0,inter2,mat_size[5]);
@@ -263,10 +242,7 @@ double inter_min_time ;
 
   for(i=0; i<my_iteration;  i++){
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
-  /*multi(C,D,inter1,&inter1,mat_size[2],mat_size[4],mat_size[3],24,i);
-  multi(B,inter1,inter2,&inter2,mat_size[1],mat_size[4],mat_size[2],25,i);
-  multi(inter2,E,inter3,&inter3,mat_size[1],mat_size[5],mat_size[4],26,i);
-  multi(A,inter3,inter4,&inter4,mat_size[0],mat_size[5],mat_size[1],27,i);*/ 
+  
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[2],mat_size[4],mat_size[3],1.0,C,mat_size[3],D,mat_size[4],0.0,inter1,mat_size[4]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[1],mat_size[4],mat_size[2],1.0,B,mat_size[2],inter1,mat_size[4],0.0,inter2,mat_size[4]);
@@ -291,10 +267,7 @@ double inter_min_time ;
 
   for(i=0; i<my_iteration;  i++){
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
-  /*multi(A,B,inter1,&inter1,mat_size[0],mat_size[2],mat_size[1],28,i);
-  multi(D,E,inter2,&inter2,mat_size[3],mat_size[5],mat_size[4],29,i);
-  multi(C,inter2,inter3,&inter3,mat_size[2],mat_size[5],mat_size[3],30,i);
-  multi(inter1,inter3,inter4,&inter4,mat_size[0],mat_size[5],mat_size[2],31,i);*/
+ 
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[0],mat_size[2],mat_size[1],1.0,A,mat_size[1],B,mat_size[2],0.0,inter1,mat_size[2]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[3],mat_size[5],mat_size[4],1.0,D,mat_size[4],E,mat_size[5],0.0,inter2,mat_size[5]);
@@ -317,10 +290,7 @@ double inter_min_time ;
 
   for(i=0; i<my_iteration;  i++){
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
-  /*multi(A,B,inter1,&inter1,mat_size[0],mat_size[2],mat_size[1],32,i);
-  multi(C,D,inter2,&inter2,mat_size[2],mat_size[4],mat_size[3],33,i);
-  multi(inter2,E,inter3,&inter3,mat_size[2],mat_size[5],mat_size[4],34,i); 
-  multi(inter1,inter3,inter4,&inter4,mat_size[0],mat_size[5],mat_size[2],35,i);*/ 
+  
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[0],mat_size[2],mat_size[1],1.0,A,mat_size[1],B,mat_size[2],0.0,inter1,mat_size[2]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[2],mat_size[4],mat_size[3],1.0,C,mat_size[3],D,mat_size[4],0.0,inter2,mat_size[4]);
@@ -343,10 +313,7 @@ double inter_min_time ;
 
   for(i=0; i<my_iteration;  i++){
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
-  /*multi(A,B,inter1,&inter1,mat_size[0],mat_size[2],mat_size[1],36,i);
-  multi(D,E,inter2,&inter2,mat_size[3],mat_size[5],mat_size[4],37,i);
-  multi(inter1,C,inter3,&inter3,mat_size[0],mat_size[3],mat_size[2],38,i);
-  multi(inter3,inter2,inter4,&inter4,mat_size[0],mat_size[5],mat_size[3],39,i); */
+  
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[0],mat_size[2],mat_size[1],1.0,A,mat_size[1],B,mat_size[2],0.0,inter1,mat_size[2]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[3],mat_size[5],mat_size[4],1.0,D,mat_size[4],E,mat_size[5],0.0,inter2,mat_size[5]);
@@ -369,10 +336,7 @@ double inter_min_time ;
 
   for(i=0; i<my_iteration;  i++){
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
-  /*multi(B,C,inter1,&inter1,mat_size[1],mat_size[3],mat_size[2],40,i);
-  multi(D,E,inter2,&inter2,mat_size[3],mat_size[5],mat_size[4],41,i);
-  multi(A,inter1,inter3,&inter3,mat_size[0],mat_size[3],mat_size[1],42,i);
-  multi(inter3,inter2,inter4,&inter4,mat_size[0],mat_size[5],mat_size[3],43,i);*/ 
+  
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[1],mat_size[3],mat_size[2],1.0,B,mat_size[2],C,mat_size[3],0.0,inter1,mat_size[3]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[3],mat_size[5],mat_size[4],1.0,D,mat_size[4],E,mat_size[5],0.0,inter2,mat_size[5]);
@@ -395,10 +359,7 @@ double inter_min_time ;
 
   for(i=0; i<my_iteration;  i++){
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
-  /*multi(B,C,inter1,&inter1,mat_size[1],mat_size[3],mat_size[2],44,i);
-  multi(A,inter1,inter2,&inter2,mat_size[0],mat_size[3],mat_size[1],45,i);
-  multi(inter2,D,inter3,&inter3,mat_size[0],mat_size[4],mat_size[3],46,i);
-  multi(inter3,E,inter4,&inter4,mat_size[0],mat_size[5],mat_size[4],47,i);*/ 
+  
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[1],mat_size[3],mat_size[2],1.0,B,mat_size[2],C,mat_size[3],0.0,inter1,mat_size[3]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[0],mat_size[3],mat_size[1],1.0,A,mat_size[1],inter1,mat_size[3],0.0,inter2,mat_size[3]);
@@ -421,10 +382,7 @@ double inter_min_time ;
 
   for(i=0; i<my_iteration;  i++){
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
-  /*multi(B,C,inter1,&inter1,mat_size[1],mat_size[3],mat_size[2],48,i);
-  multi(inter1,D,inter2,&inter2,mat_size[1],mat_size[4],mat_size[3],49,i);
-  multi(A,inter2,inter3,&inter3,mat_size[0],mat_size[4],mat_size[1],50,i);
-  multi(inter3,E,inter4,&inter4,mat_size[0],mat_size[5],mat_size[4],51,i);*/ 
+ 
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[1],mat_size[3],mat_size[2],1.0,B,mat_size[2],C,mat_size[3],0.0,inter1,mat_size[3]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[1],mat_size[4],mat_size[3],1.0,inter1,mat_size[3],D,mat_size[4],0.0,inter2,mat_size[4]);
@@ -447,10 +405,7 @@ double inter_min_time ;
 
   for(i=0; i<my_iteration;  i++){
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
-  /*multi(A,B,inter1,&inter1,mat_size[0],mat_size[2],mat_size[1],52,i);
-  multi(C,D,inter2,&inter2,mat_size[2],mat_size[4],mat_size[3],53,i);
-  multi(inter1,inter2,inter3,&inter3,mat_size[0],mat_size[4],mat_size[2],54,i); 
-  multi(inter3,E,inter4,&inter4,mat_size[0],mat_size[5],mat_size[4],55,i);*/ 
+ 
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[0],mat_size[2],mat_size[1],1.0,A,mat_size[1],B,mat_size[2],0.0,inter1,mat_size[2]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[2],mat_size[4],mat_size[3],1.0,C,mat_size[3],D,mat_size[4],0.0,inter2,mat_size[4]);
