@@ -38,7 +38,7 @@ double dummy_indv_duration[64][30],indv_gflops[64],dummy_no_operation[64],indv_d
 
 int main(int argc, char* argv[])
 {
-  int i,j,my_iteration=10;
+  int i,j,my_iteration=5;
   double total_duration[14],total_gflops[14],total_no_operation[14];                                                   //stores values for each paths
   char *all_paths[] ={"((((A*B)*C)*D)*E)","((A*(B*(C *D)))*E)","(A*(B*(C*(D*E))))","(A*(((B*C)*D)*E))",
                  "(A*((B*C)*(D*E)))","(A*(B*((C*D)*E)))","(A*((B*(C*D))*E))","((A*B)(C*(D*E)))",
@@ -90,7 +90,7 @@ int main(int argc, char* argv[])
 
 double inter_min_time ;
 
-//Path 0 - ((((A*B)*C)*D)*E)
+  //Path 0 - ((((A*B)*C)*D)*E)
   inter1=reallocate(&inter1,mat_size[0],mat_size[2]);
   inter2=reallocate(&inter2,mat_size[0],mat_size[3]);
   inter3=reallocate(&inter3,mat_size[0],mat_size[4]);
@@ -108,12 +108,13 @@ double inter_min_time ;
 
   dummy_indv_duration[0][i] = ((double)(finish.tv_sec-start.tv_sec)*1000000 + (double)(finish.tv_usec-start.tv_usec)) / 1000000;
   }
+
   dummy_no_operation[0] = 2.0 *( (mat_size[0]*mat_size[2]*mat_size[1]) + (mat_size[0]*mat_size[3]*mat_size[2]) );
   dummy_no_operation[0] = dummy_no_operation[0]+ 2.0 *( ( mat_size[0]*mat_size[4]*mat_size[3] )+ (mat_size[0]*mat_size[5]*mat_size[4]) );
   if(MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
   
-//path 1 - ((A*(B*(C *D)))*E)
+  //path 1 - ((A*(B*(C *D)))*E)
   inter1=reallocate(&inter1,mat_size[2],mat_size[4]);
   inter2=reallocate(&inter2,mat_size[1],mat_size[4]);
   inter3=reallocate(&inter3,mat_size[0],mat_size[4]);
@@ -160,7 +161,7 @@ double inter_min_time ;
   printfunc(inter4,mat_size[0],mat_size[5]);
 
 
-//path 3 - (A*(((B*C)*D)*E))
+  //path 3 - (A*(((B*C)*D)*E))
   inter1=reallocate(&inter1,mat_size[1],mat_size[3]);
   inter2=reallocate(&inter2,mat_size[1],mat_size[4]);
   inter3=reallocate(&inter3,mat_size[1],mat_size[5]);
@@ -186,7 +187,7 @@ double inter_min_time ;
   printfunc(inter4,mat_size[0],mat_size[5]);
 
   
-//path 4 - (A*((B*C)*(D*E)))
+  //path 4 - (A*((B*C)*(D*E)))
   inter1=reallocate(&inter1,mat_size[1],mat_size[3]);
   inter2=reallocate(&inter2,mat_size[3],mat_size[5]);
   inter3=reallocate(&inter3,mat_size[1],mat_size[5]);
@@ -209,7 +210,7 @@ double inter_min_time ;
   if(MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
 
-//path 5 - (A*(B*((C*D)*E)))  
+  //path 5 - (A*(B*((C*D)*E)))  
   inter1=reallocate(&inter1,mat_size[2],mat_size[4]);
   inter2=reallocate(&inter2,mat_size[2],mat_size[5]);
   inter3=reallocate(&inter3,mat_size[1],mat_size[5]);
@@ -233,7 +234,7 @@ double inter_min_time ;
   printfunc(inter4,mat_size[0],mat_size[5]);
 
 
-//path 6 - (A*((B*(C*D))*E))
+  //path 6 - (A*((B*(C*D))*E))
   inter1=reallocate(&inter1,mat_size[2],mat_size[4]);
   inter2=reallocate(&inter2,mat_size[1],mat_size[4]);
   inter3=reallocate(&inter3,mat_size[1],mat_size[5]);
@@ -258,7 +259,7 @@ double inter_min_time ;
   if (MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
 
-//path 7 - ((A*B)(C*(D*E)))
+  //path 7 - ((A*B)(C*(D*E)))
   inter1=reallocate(&inter1,mat_size[0],mat_size[2]);
   inter2=reallocate(&inter2,mat_size[3],mat_size[5]);
   inter3=reallocate(&inter3,mat_size[2],mat_size[5]);
@@ -281,8 +282,8 @@ double inter_min_time ;
   if(MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
 
-
-//path 8 - ((A*B)((C*D)*E))
+ 
+  //path 8 - ((A*B)((C*D)*E))
   inter1=reallocate(&inter1,mat_size[0],mat_size[2]);
   inter2=reallocate(&inter2,mat_size[2],mat_size[4]);
   inter3=reallocate(&inter3,mat_size[2],mat_size[5]);
@@ -304,7 +305,7 @@ double inter_min_time ;
   if(MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
 
-//path 9 - (((A*B)*C)(D*E))  
+  //path 9 - (((A*B)*C)(D*E))  
   inter1=reallocate(&inter1,mat_size[0],mat_size[2]);
   inter2=reallocate(&inter2,mat_size[3],mat_size[5]);
   inter3=reallocate(&inter3,mat_size[0],mat_size[3]);
@@ -327,7 +328,7 @@ double inter_min_time ;
   if(MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
 
-//path 10 - ((A*(B*C))*(D*E))
+  //path 10 - ((A*(B*C))*(D*E))
   inter1=reallocate(&inter1,mat_size[1],mat_size[3]);
   inter2=reallocate(&inter2,mat_size[3],mat_size[5]);
   inter3=reallocate(&inter3,mat_size[0],mat_size[3]);
@@ -350,7 +351,7 @@ double inter_min_time ;
   if(MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
 
-//path 11 - (((A*(B*C))*D)*E)
+  //path 11 - (((A*(B*C))*D)*E)
   inter1=reallocate(&inter1,mat_size[1],mat_size[3]);
   inter2=reallocate(&inter2,mat_size[0],mat_size[3]);
   inter3=reallocate(&inter3,mat_size[0],mat_size[4]);
@@ -373,7 +374,7 @@ double inter_min_time ;
   if(MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
 
-//path 12 - ((A*((B*C)*D))*E)
+  //path 12 - ((A*((B*C)*D))*E)
   inter1=reallocate(&inter1,mat_size[1],mat_size[3]);
   inter2=reallocate(&inter2,mat_size[1],mat_size[4]);
   inter3=reallocate(&inter3,mat_size[0],mat_size[4]);
@@ -396,7 +397,7 @@ double inter_min_time ;
   if(MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
 
-//path 13 - (((A*B)*(C*D))*E)
+  //path 13 - (((A*B)*(C*D))*E)
   inter1=reallocate(&inter1,mat_size[0],mat_size[2]);
   inter2=reallocate(&inter2,mat_size[2],mat_size[4]);
   inter3=reallocate(&inter3,mat_size[0],mat_size[4]);
@@ -427,7 +428,7 @@ double inter_min_time ;
 
 
 
-for(i=0; i<14; i++) {
+ for(i=0; i<14; i++) {
   inter_min_time =dummy_indv_duration[i][0];
   for (j=0; j<my_iteration; j++){
     if(dummy_indv_duration[i][j] <=inter_min_time){
@@ -435,15 +436,15 @@ for(i=0; i<14; i++) {
     }
     indv_duration[i] =inter_min_time;
   }
-}
+ }
 
 
   for(i=0; i<14; i++){
     for(j=0; j<my_iteration; j++){  
     printf("%f \t",dummy_indv_duration[i][j]);
     }
-  //printf("\n");
-    printf("%f %d \n",indv_duration [i],i);
+   //printf("\n");
+    printf("%f path(%d) \n",indv_duration [i],i);
   }
 
 //  for(i=0; i<14; i++)
@@ -485,24 +486,27 @@ for(i=0; i<14; i++) {
 if (OUTPUT_in_FILE !=0){
   FILE *fp;                                                           //writes output to a file 
   fp = fopen("result.txt", "a");
-   for(i=0; i<14; i++)
-    fprintf(fp,"path[%d] \t%lf s\t%lf TFLOPS \t%lf\n",i,total_duration[i],total_gflops[i],total_no_operation[i]);
+  for(i=0; i<14; i++)                                                                     
+   fprintf(fp,"path[%d] \t%lf s\t%lf  \t%lf TFLOPS\n",i,total_duration[i],total_no_operation[i],total_gflops[i]);
   fprintf(fp,"\n");
-  fprintf(fp," min_time =%f  \n",min_time );
-  fprintf(fp,"min_flops =%f  and takes %f s \n",min_flops,total_duration[flop_index]);
-  fprintf(fp,"deviation is =%f \n",deviation);
+  fprintf(fp,"\t\t  min_flops path[%d] takes %f s \n",flop_index,total_duration[flop_index]);
+  fprintf(fp,"\t\t  min_time  path[%d] takes %f s \n",time_index,min_time );
+  fprintf(fp,"\t\t  deviation is =%f \n",deviation);   
   fclose(fp);
 }
 
 if (OUTPUT_on_SCREEN !=0){
   for(i=0; i<14; i++)                                                                     //prints output on screen
-   printf("path[%d] \t%lf s\t%lf TFLOPS \t%lf\n",i,total_duration[i],total_gflops[i],total_no_operation[i]);
+   printf("path[%d] \t%lf s\t%lf \t%lf TFLOPS\n",i,total_duration[i],total_no_operation[i],total_gflops[i]);
   printf("\n");
-  printf("path[%d] min_time =%f  \n",time_index,min_time );
-  printf("path[%d] min_flops =%f  and takes %f s \n",flop_index,min_flops,total_duration[flop_index]);
-  printf("deviation is =%f \n",deviation);
-}
- 
+  
+  printf("\t\t  min_flops path[%d] takes %f s \n",flop_index,total_duration[flop_index]);
+  printf("\t\t  min_time  path[%d] takes %f s \n",time_index,min_time );
+  printf("\t\t  deviation is =%f \n",deviation);
+ }
+
+
+
 
 
 

@@ -87,151 +87,167 @@ int main(int argc, char* argv[])
 
 int my_iteration = 5;
 double inter_min_time ;
-for(i=0; i<my_iteration;  i++){
- //Path 0 - ((((A*B)*C)*D)*E)             
+
+  for(i=0; i<my_iteration;  i++){
+  //Path 0 - ((((A*B)*C)*D)*E)             
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n); 
   multi(A,B,inter1,&inter1,mat_size[0],mat_size[2],mat_size[1],0,i);
   multi(inter1,C,inter2,&inter2,mat_size[0],mat_size[3],mat_size[2],1,i);
   multi(inter2,D,inter3,&inter3,mat_size[0],mat_size[4],mat_size[3],2,i);
   multi(inter3,E,inter4,&inter4,mat_size[0],mat_size[5],mat_size[4],3,i); 
-  }if(MATRIX !=0)
+  }
+  if(MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
   
   for(i=0; i<my_iteration;  i++){
-//path 1 - ((A*(B*(C *D)))*E)
+  //path 1 - ((A*(B*(C *D)))*E)
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
   multi(C,D,inter1,&inter1,mat_size[2],mat_size[4],mat_size[3],4,i);
   multi(B,inter1,inter2,&inter2,mat_size[1],mat_size[4],mat_size[2],5,i);
   multi(A,inter2,inter3,&inter3,mat_size[0],mat_size[4],mat_size[1],6,i);
   multi(inter3,E,inter4,&inter4,mat_size[0],mat_size[5],mat_size[4],7,i);
-  }if(MATRIX!=0)
+  }
+  if(MATRIX!=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
-for(i=0; i<my_iteration;  i++){
+
+  for(i=0; i<my_iteration;  i++){
   //path 2 - (A*(B*(C*(D*E))))
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
   multi(D,E,inter1,&inter1,mat_size[3],mat_size[5],mat_size[4],8,i);
   multi(C,inter1,inter2,&inter2,mat_size[2],mat_size[5],mat_size[3],9,i);
   multi(B,inter2,inter3,&inter3,mat_size[1],mat_size[5],mat_size[2],10,i);
   multi(A,inter3,inter4,&inter4,mat_size[0],mat_size[5],mat_size[1],11,i);
-  }if(MATRIX !=0)
+  }
+  if(MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
 
-for(i=0; i<my_iteration;  i++){
-//path 3 - (A*(((B*C)*D)*E))
+  for(i=0; i<my_iteration;  i++){
+  //path 3 - (A*(((B*C)*D)*E))
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
   multi(B,C,inter1,&inter1,mat_size[1],mat_size[3],mat_size[2],12,i);
   multi(inter1,D,inter2,&inter2,mat_size[1],mat_size[4],mat_size[3],13,i);
   multi(inter2,E,inter3,&inter3,mat_size[1],mat_size[5],mat_size[4],14,i);
   multi(A,inter3,inter4,&inter4,mat_size[0],mat_size[5],mat_size[1],15,i); 
-  }if(MATRIX !=0)
+  }
+  if(MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
 
-for(i=0; i<my_iteration;  i++){
+  for(i=0; i<my_iteration;  i++){
   //path 4 - (A*((B*C)*(D*E)))
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
   multi(B,C,inter1,&inter1,mat_size[1],mat_size[3],mat_size[2],16,i);
   multi(D,E,inter2,&inter2,mat_size[3],mat_size[5],mat_size[4],17,i);
   multi(inter1,inter2,inter3,&inter3,mat_size[1],mat_size[5],mat_size[3],18,i);
   multi(A,inter3,inter4,&inter4,mat_size[0],mat_size[5],mat_size[1],19,i); 
-  }if(MATRIX !=0)
+  }
+  if(MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
 
-for(i=0; i<my_iteration;  i++){
-//path 5 - (A*(B*((C*D)*E)))  
+  for(i=0; i<my_iteration;  i++){
+  //path 5 - (A*(B*((C*D)*E)))  
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
   multi(C,D,inter1,&inter1,mat_size[2],mat_size[4],mat_size[3],20,i);  
   multi(inter1,E,inter2,&inter2,mat_size[2],mat_size[5],mat_size[4],21,i);
   multi(B,inter2,inter3,&inter3,mat_size[1],mat_size[5],mat_size[2],22,i);
   multi(A,inter3,inter4,&inter4,mat_size[0],mat_size[5],mat_size[1],23,i); 
-  }if(MATRIX !=0)
+  }
+  if(MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
 
-for(i=0; i<my_iteration;  i++){
-//path 6 - (A*((B*(C*D))*E))
+  for(i=0; i<my_iteration;  i++){
+  //path 6 - (A*((B*(C*D))*E))
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
   multi(C,D,inter1,&inter1,mat_size[2],mat_size[4],mat_size[3],24,i);
   multi(B,inter1,inter2,&inter2,mat_size[1],mat_size[4],mat_size[2],25,i);
   multi(inter2,E,inter3,&inter3,mat_size[1],mat_size[5],mat_size[4],26,i);
   multi(A,inter3,inter4,&inter4,mat_size[0],mat_size[5],mat_size[1],27,i); 
-  }if (MATRIX !=0)
+  }
+  if (MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
 
-for(i=0; i<my_iteration;  i++){
-//path 7 - ((A*B)(C*(D*E)))
+  for(i=0; i<my_iteration;  i++){
+  //path 7 - ((A*B)(C*(D*E)))
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
   multi(A,B,inter1,&inter1,mat_size[0],mat_size[2],mat_size[1],28,i);
   multi(D,E,inter2,&inter2,mat_size[3],mat_size[5],mat_size[4],29,i);
   multi(C,inter2,inter3,&inter3,mat_size[2],mat_size[5],mat_size[3],30,i);
   multi(inter1,inter3,inter4,&inter4,mat_size[0],mat_size[5],mat_size[2],31,i); 
-  }if(MATRIX !=0)
+  }
+  if(MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
 
-for(i=0; i<my_iteration;  i++){
-//path 8 - ((A*B)((C*D)*E))
+  for(i=0; i<my_iteration;  i++){
+  //path 8 - ((A*B)((C*D)*E))
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
   multi(A,B,inter1,&inter1,mat_size[0],mat_size[2],mat_size[1],32,i);
   multi(C,D,inter2,&inter2,mat_size[2],mat_size[4],mat_size[3],33,i);
   multi(inter2,E,inter3,&inter3,mat_size[2],mat_size[5],mat_size[4],34,i); 
   multi(inter1,inter3,inter4,&inter4,mat_size[0],mat_size[5],mat_size[2],35,i); 
-  }if(MATRIX !=0)
+  }
+  if(MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
 
-for(i=0; i<my_iteration;  i++){
-//path 9 - (((A*B)*C)(D*E))
+  for(i=0; i<my_iteration;  i++){
+  //path 9 - (((A*B)*C)(D*E))
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
   multi(A,B,inter1,&inter1,mat_size[0],mat_size[2],mat_size[1],36,i);
   multi(D,E,inter2,&inter2,mat_size[3],mat_size[5],mat_size[4],37,i);
   multi(inter1,C,inter3,&inter3,mat_size[0],mat_size[3],mat_size[2],38,i);
   multi(inter3,inter2,inter4,&inter4,mat_size[0],mat_size[5],mat_size[3],39,i); 
-  }if(MATRIX !=0)
+  }
+  if(MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
 
-for(i=0; i<my_iteration;  i++){
-//path 10 - ((A*(B*C))*(D*E))
+  for(i=0; i<my_iteration;  i++){
+  //path 10 - ((A*(B*C))*(D*E))
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
   multi(B,C,inter1,&inter1,mat_size[1],mat_size[3],mat_size[2],40,i);
   multi(D,E,inter2,&inter2,mat_size[3],mat_size[5],mat_size[4],41,i);
   multi(A,inter1,inter3,&inter3,mat_size[0],mat_size[3],mat_size[1],42,i);
   multi(inter3,inter2,inter4,&inter4,mat_size[0],mat_size[5],mat_size[3],43,i); 
-  }if(MATRIX !=0)
+  }
+  if(MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
  
-for(i=0; i<my_iteration;  i++){
-//path 11 - (((A*(B*C))*D)*E)
+  for(i=0; i<my_iteration;  i++){
+  //path 11 - (((A*(B*C))*D)*E)
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
   multi(B,C,inter1,&inter1,mat_size[1],mat_size[3],mat_size[2],44,i);
   multi(A,inter1,inter2,&inter2,mat_size[0],mat_size[3],mat_size[1],45,i);
   multi(inter2,D,inter3,&inter3,mat_size[0],mat_size[4],mat_size[3],46,i);
   multi(inter3,E,inter4,&inter4,mat_size[0],mat_size[5],mat_size[4],47,i); 
-  }if(MATRIX !=0)
+  }
+  if(MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
 
 
-for(i=0; i<my_iteration;  i++){
-//path 12 - ((A*((B*C)*D))*E)
+  for(i=0; i<my_iteration;  i++){
+  //path 12 - ((A*((B*C)*D))*E)
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
   multi(B,C,inter1,&inter1,mat_size[1],mat_size[3],mat_size[2],48,i);
   multi(inter1,D,inter2,&inter2,mat_size[1],mat_size[4],mat_size[3],49,i);
   multi(A,inter2,inter3,&inter3,mat_size[0],mat_size[4],mat_size[1],50,i);
   multi(inter3,E,inter4,&inter4,mat_size[0],mat_size[5],mat_size[4],51,i); 
-  }if(MATRIX !=0)
+  }
+  if(MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
 
 
-for(i=0; i<my_iteration;  i++){
-//path 13 - (((A*B)*(C*D))*E)
+  for(i=0; i<my_iteration;  i++){
+  //path 13 - (((A*B)*(C*D))*E)
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
   multi(A,B,inter1,&inter1,mat_size[0],mat_size[2],mat_size[1],52,i);
   multi(C,D,inter2,&inter2,mat_size[2],mat_size[4],mat_size[3],53,i);
   multi(inter1,inter2,inter3,&inter3,mat_size[0],mat_size[4],mat_size[2],54,i); 
   multi(inter3,E,inter4,&inter4,mat_size[0],mat_size[5],mat_size[4],55,i); 
-  }if(MATRIX !=0)
+  }
+  if(MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);                                                      //Actual matrix multiplication ends
   
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
 
 
-for(i=0; i<56; i++) {
+  for(i=0; i<56; i++) {
   inter_min_time =dummy_indv_duration[i][0];
   for (j=0; j<my_iteration; j++){
     if(dummy_indv_duration[i][j] <=inter_min_time){
@@ -239,24 +255,25 @@ for(i=0; i<56; i++) {
     }
     indv_duration[i] =inter_min_time;
   }
-}
+ }
 
 
-for(i=0; i<56; i++){
- for(j=0; j<my_iteration; j++){  
-printf("%f \t",dummy_indv_duration[i][j]);
-}
-printf("%f %d \n",indv_duration [i],i);
-}
-/*
-for(i=0; i<56; i++){
- for(j=0; j<my_iteration; j++){  
-printf("%f \t",dummy_no_operation[i][j]);
-}
-printf("%d \n",i);
-}
+ for(i=0; i<56; i++){
+  for(j=0; j<my_iteration; j++){  
+   printf("%f \t",dummy_indv_duration[i][j]);
+  }
+  printf("%f Multi(%d) \n",indv_duration [i],i);
+ }
 
-*/
+ /*
+ for(i=0; i<56; i++){
+  for(j=0; j<my_iteration; j++){  
+   printf("%f \t",dummy_no_operation[i][j]);
+  }
+  printf("%d \n",i);
+ }
+
+ */
 
 
   for(i=0; i<14; i++){                                                             //calculates total time, flops for each path          
@@ -289,26 +306,28 @@ printf("%d \n",i);
   strcpy(time_path,all_paths[time_index]);
   strcpy(flop_path,all_paths[flop_index]);
 
+ 
 if (OUTPUT_in_FILE !=0){
   FILE *fp;                                                           //writes output to a file 
   fp = fopen("result.txt", "a");
-   for(i=0; i<14; i++)
-    fprintf(fp,"path[%d] \t%lf s\t%lf TFLOPS \t%lf\n",i,total_duration[i],total_gflops[i],total_no_operation[i]);
+  for(i=0; i<14; i++)                                                                    
+   fprintf(fp,"path[%d] \t%lf s\t%lf \t%lf TFLOPS\n",i,total_duration[i],total_no_operation[i],total_gflops[i]);
   fprintf(fp,"\n");
-  fprintf(fp," min_time =%f  \n",min_time );
-  fprintf(fp,"min_flops =%f  and takes %f s \n",min_flops,total_duration[flop_index]);
-  fprintf(fp,"deviation is =%f \n",deviation);
+  fprintf(fp,"\t\t  min_flops path[%d] takes %f s \n",flop_index,total_duration[flop_index]);
+  fprintf(fp,"\t\t  min_time  path[%d] takes %f s \n",time_index,min_time );
+  fprintf(fp,"\t\t  deviation is =%f \n",deviation);   
   fclose(fp);
 }
 
-if (OUTPUT_on_SCREEN !=0){
+ if (OUTPUT_on_SCREEN !=0){
   for(i=0; i<14; i++)                                                                     //prints output on screen
-   printf("path[%d] \t%lf s\t%lf TFLOPS \t%lf\n",i,total_duration[i],total_gflops[i],total_no_operation[i]);
+   printf("path[%d] \t%lf s\t%lf \t%lf TFLOPS\n",i,total_duration[i],total_no_operation[i],total_gflops[i]);
   printf("\n");
-  printf("path[%d] min_time =%f  \n",time_index,min_time );
-  printf("path[%d] min_flops =%f  and takes %f s \n",flop_index,min_flops,total_duration[flop_index]);
-  printf("deviation is =%f \n",deviation);
-}
+  
+  printf("\t\t  min_flops path[%d] takes %f s \n",flop_index,total_duration[flop_index]);
+  printf("\t\t  min_time  path[%d] takes %f s \n",time_index,min_time );
+  printf("\t\t  deviation is =%f \n",deviation);
+ }
  
 
   free(A);
