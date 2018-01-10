@@ -20,11 +20,11 @@
 #include "cblas.h"
 #include <string.h>
 #define min(x,y) (((x) < (y)) ? (x) : (y))
-#define OUTPUT_in_FILE 0    //change it to 1, if output needs be written in a file
-#define OUTPUT_on_SCREEN 1  //change it to Zero (0) , if you don't want to print it on screen
+#define OUTPUT_in_FILE 1    //change it to 1, if output needs be written in a file
+#define OUTPUT_on_SCREEN 0  //change it to Zero (0) , if you don't want to print it on screen
 #define MATRIX 0            //change it to 1, if you want to check for the final matrix of each path
 #define global_iteration 5
-#define INTERMEDIATE_TIMINGS 1
+#define INTERMEDIATE_TIMINGS 0
 
 double* allocate(int size);                                                                                           //alloacte memory for matrices
 void initialize_zero(double *locptr,int size);                                                                        //initialize matrices to zero
@@ -40,7 +40,7 @@ double dummy_indv_duration[64][30],indv_gflops[64],dummy_no_operation[64],indv_d
 
 int main(int argc, char* argv[])
 {
-  int i,j,outer_itr, my_iteration=1;
+  int i,j,outer_itr, my_iteration=3;
   double total_duration[14],total_gflops[14],total_no_operation[14];                                                   //stores values for each paths
   char *all_paths[] ={"((((A*B)*C)*D)*E)","((A*(B*(C *D)))*E)","(A*(B*(C*(D*E))))","(A*(((B*C)*D)*E))",
                  "(A*((B*C)*(D*E)))","(A*(B*((C*D)*E)))","(A*((B*(C*D))*E))","((A*B)(C*(D*E)))",
@@ -499,6 +499,7 @@ if (OUTPUT_in_FILE !=0){
   fprintf(fp,"\t\t  min_flops path[%d] takes %f s \n",flop_index,total_duration[flop_index]);
   fprintf(fp,"\t\t  min_time  path[%d] takes %f s \n",time_index,min_time );
   fprintf(fp,"\t\t  deviation is =%f \n",deviation);   
+  fprintf(fp,"____******_______*******________________________________________*****************_____________________\n");
   fclose(fp);
 }
 
@@ -523,11 +524,22 @@ if (OUTPUT_on_SCREEN !=0){
 
 
 printf("\n\n");
-
-for(i=0; i<global_iteration; i++)
+if (OUTPUT_on_SCREEN != 0)
 {
+for(i=0; i<global_iteration; i++)
 printf( " iteration[%d] PATH[%d]-min_time=%f \t PATH[%d]-min_flops=%f \t deviation=%f \n",i,outer_time_index[i],outer_min_time[i],outer_flop_index[i],outer__min_flops[i],outer_deviation[i]);
 }
+
+if (OUTPUT_in_FILE !=0){
+  FILE *fp;                                                           //writes output to a file 
+  fp = fopen("result.txt", "a");
+  for(i=0; i<global_iteration; i++)                                                                     
+  fprintf( fp," iteration[%d] PATH[%d]-min_time=%f \t PATH[%d]-min_flops=%f \t deviation=%f \n",i,outer_time_index[i],outer_min_time[i],outer_flop_index[i],outer__min_flops[i],outer_deviation[i]);  
+  fprintf(fp,"____******_______*******________________________________________*****************_____________________\n");
+  fclose(fp);
+}
+
+
 
   free(A);
   free(B);
