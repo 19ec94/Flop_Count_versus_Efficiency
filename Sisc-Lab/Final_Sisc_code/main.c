@@ -21,7 +21,7 @@
 #include <string.h>
 #define min(x,y) (((x) < (y)) ? (x) : (y))
 #define OUTPUT_in_FILE 1    //change it to 1, if output needs be written in a file
-#define OUTPUT_on_SCREEN 0  //change it to Zero (0) , if you don't want to print it on screen
+#define OUTPUT_on_SCREEN 1  //change it to Zero (0) , if you don't want to print it on screen
 #define MATRIX 0            //change it to 1, if you want to check for the final matrix of each path
 #define global_iteration 5
 #define INTERMEDIATE_TIMINGS 0
@@ -32,7 +32,7 @@ void initialize( double* locptr, int size);                  //Initialize matric
 //void multi(double* A,double*B, double*inter1, double **tempptr,int m, int n, int k,int tt,int itr );                          //matrix multiplication  
 double* reallocate(double** tempptr, int m, int n);
 void printfunc (double* matrix, int row, int col);                                                                    //print resultant matrix 
-
+void sorting (double* total);
 
 static int mat_size[7];                                                                                                // stores the matrix sizes
 double dummy_indv_duration[64][30],indv_gflops[64],dummy_no_operation[64],indv_duration[64],no_operation[64];
@@ -40,7 +40,7 @@ double dummy_indv_duration[64][30],indv_gflops[64],dummy_no_operation[64],indv_d
 
 int main(int argc, char* argv[])
 {
-  int i,j,outer_itr, my_iteration=3;
+  int i,j,outer_itr, my_iteration=1;
   double total_duration[14],total_gflops[14],total_no_operation[14];                                                   //stores values for each paths
   char *all_paths[] ={"((((A*B)*C)*D)*E)","((A*(B*(C *D)))*E)","(A*(B*(C*(D*E))))","(A*(((B*C)*D)*E))",
                  "(A*((B*C)*(D*E)))","(A*(B*((C*D)*E)))","(A*((B*(C*D))*E))","((A*B)(C*(D*E)))",
@@ -55,8 +55,12 @@ int main(int argc, char* argv[])
  double outer_min_time[global_iteration];
  double outer__min_flops[global_iteration];
  double outer_deviation[global_iteration];
+ double total_duration_1[60],final_duration[60],total_gflops_1[60],no_operation[60];
+ int duration_index[20],gflops_index[20];  //dummy variables for sorting; 
 
-  printf("test!\n");
+
+ 
+ printf("test!\n");
   if(argc<7){
     printf("Input Error\n");
     return 1;
@@ -472,6 +476,13 @@ for (outer_itr=0; outer_itr<global_iteration; outer_itr++ )
    total_gflops[i] = total_no_operation[i]/total_duration[i];
  }
   
+
+
+
+
+
+
+
   min_time =total_duration[0];                      //finds min_time                              
  for (i=1; i<14; i++){
    if(total_duration[i] <=min_time){
@@ -490,11 +501,63 @@ for (outer_itr=0; outer_itr<global_iteration; outer_itr++ )
   //deviation = (min_time - timeof min_flop path)/min_time
   deviation = ( total_duration[flop_index] -total_duration[time_index] )/total_duration[time_index];
 
+
+  for(i=0; i<14; i++)
+  {
+   total_duration_1[i] = total_duration[i];
+   final_duration[i] = total_duration [i]; 
+ }
+
+
+  for(i=0; i<14; i++)
+  {
+     total_gflops_1[i] = total_no_operation[i];
+     no_operation[i] = total_no_operation[i];
+  }
+
+
+
+ sorting(final_duration);
+ sorting(no_operation);
+
+  for (i=0; i<14; i++) 
+  {
+       for (j=0; j<14; j++) 
+        {
+         if (final_duration[i] == total_duration_1[j])
+         {
+            duration_index[i] = j;
+         }
+         else continue ;
+        } 
+  } 
+
+
+
+  for (i=0; i<14; i++) 
+  {
+       for (j=0; j<14; j++) 
+        {
+          if (no_operation[i] == total_gflops_1[j])
+          {
+             gflops_index[i] = j;
+          }
+          else continue ;
+        } 
+  } 
+
+
+
+
+
+
 if (OUTPUT_in_FILE !=0){
   FILE *fp;                                                           //writes output to a file 
   fp = fopen("result.txt", "a");
   for(i=0; i<14; i++)                                                                     
-   fprintf(fp,"path[%d] \t%lf s\t%lf \t%lf TFLOPS\n",i,total_duration[i],total_no_operation[i],total_gflops[i]);
+   fprintf(fp,"path[%d] \t\t%lf (s)\t\t%lf \t\t\t%lf TFLOPS\t\t\t\t %lf (s)\t[%d] \t\t%lf\t[%d]\n",i,total_duration[i],total_no_operation[i],total_gflops[i],final_duration[i],duration_index[i],no_operation[i],gflops_index[i]);
+   //fprintf(fp,"path[%d] \t%lf s\t%lf \t%lf TFLOPS\n",i,total_duration[i],total_no_operation[i],total_gflops[i]);
+  
   fprintf(fp,"\n");
   fprintf(fp,"\t\t  min_flops path[%d] takes %f s \n",flop_index,total_duration[flop_index]);
   fprintf(fp,"\t\t  min_time  path[%d] takes %f s \n",time_index,min_time );
@@ -505,7 +568,8 @@ if (OUTPUT_in_FILE !=0){
 
 if (OUTPUT_on_SCREEN !=0){
   for(i=0; i<14; i++)                                                                     //prints output on screen
-   printf("path[%d] \t%lf s\t%lf \t%lf TFLOPS\n",i,total_duration[i],total_no_operation[i],total_gflops[i]);
+   printf("path[%d] \t\t%lf (s)\t\t%lf \t\t\t%lf TFLOPS\t\t\t\t %lf (s)[%d] \t\t%lf\t[%d]\n",i,total_duration[i],total_no_operation[i],total_gflops[i],final_duration[i],duration_index[i],no_operation[i],gflops_index[i]);
+   //printf("path[%d] \t%lf (s)\t%lf \t%lf TFLOPS\t\t\t\t %lf (s)[%d]\t %lf[%d]\n  ",i,total_duration[i],total_no_operation[i],total_gflops[i],final_duration[i],duration_index[i],no_operation[i],gflops_index[i]);
   printf("\n");
   
   printf("\t\t  min_flops path[%d] takes %f s \n",flop_index,total_duration[flop_index]);
@@ -598,3 +662,27 @@ void printfunc (double* matrix, int row, int col){
   }
   printf("____________________________________________________________\n");
 }
+
+void sorting (double* total)
+{
+  int i,j;
+  double temp;
+  for (i = 0; i < 14; i++)
+    {
+        for (j = 0; j < (14 - i - 1); j++)
+        {
+            if (total[j] > total[j + 1])
+
+            {
+
+                temp = total[j];
+
+                total[j] = total[j + 1];
+
+                total[j + 1] = temp;  
+            }
+        }
+    }
+}
+
+
