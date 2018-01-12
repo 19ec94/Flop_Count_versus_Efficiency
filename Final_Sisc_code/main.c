@@ -23,7 +23,7 @@
 #define OUTPUT_in_FILE 1    //change it to 1, if output needs be written in a file
 #define OUTPUT_on_SCREEN 1  //change it to Zero (0) , if you don't want to print it on screen
 #define MATRIX 0            //change it to 1, if you want to check for the final matrix of each path
-#define global_iteration 5
+#define global_iteration 25
 #define INTERMEDIATE_TIMINGS 0
 
 double* allocate(int size);                                                                                           //alloacte memory for matrices
@@ -40,7 +40,17 @@ double dummy_indv_duration[64][30],indv_gflops[64],dummy_no_operation[64],indv_d
 
 int main(int argc, char* argv[])
 {
-  int i,j,outer_itr, my_iteration=1;
+ int outer_time_index[global_iteration];
+ int outer_flop_index[global_iteration];
+ double outer_min_time[global_iteration];
+ double outer__min_flops[global_iteration];
+ double outer_deviation[global_iteration];
+  int outer_itr,i;
+
+
+for (outer_itr=0; outer_itr<global_iteration; outer_itr++ )
+{
+  int i,j, my_iteration=3;
   double total_duration[14],total_gflops[14],total_no_operation[14];                                                   //stores values for each paths
   char *all_paths[] ={"((((A*B)*C)*D)*E)","((A*(B*(C *D)))*E)","(A*(B*(C*(D*E))))","(A*(((B*C)*D)*E))",
                  "(A*((B*C)*(D*E)))","(A*(B*((C*D)*E)))","(A*((B*(C*D))*E))","((A*B)(C*(D*E)))",
@@ -50,11 +60,8 @@ int main(int argc, char* argv[])
   initialize_zero(total_gflops,14);
  
  
- int outer_time_index[global_iteration];
- int outer_flop_index[global_iteration];
- double outer_min_time[global_iteration];
- double outer__min_flops[global_iteration];
- double outer_deviation[global_iteration];
+ 
+
  double total_duration_1[60],final_duration[60],total_gflops_1[60],no_operation[60];
  int duration_index[20],gflops_index[20];  //dummy variables for sorting; 
 
@@ -105,8 +112,7 @@ int main(int argc, char* argv[])
 double inter_min_time ;
 
 
-for (outer_itr=0; outer_itr<global_iteration; outer_itr++ )
-{
+
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n); 
   //Path 0 - ((((A*B)*C)*D)*E)
   inter1=reallocate(&inter1,mat_size[0],mat_size[2]);
@@ -584,7 +590,29 @@ if (OUTPUT_on_SCREEN !=0){
  outer_min_time[outer_itr]   = total_duration[time_index];
  outer__min_flops[outer_itr] = total_duration[flop_index];
  outer_deviation[outer_itr]  = deviation;
+
+
+
+
+
+
+
+  free(A);
+  free(B);
+  free(C);
+  free(D);
+  free(E);
+  free(inter1);
+  free(inter2);
+  free(inter3);
+  free(inter4);
+  free(dummy_a);
+  free(dummy_b);
+  free(dummy_c);
+  printf("Everything is successful\n");
+  
 } //end of global iteration
+
 
 
 printf("\n\n");
@@ -605,20 +633,8 @@ if (OUTPUT_in_FILE !=0){
 
 
 
-  free(A);
-  free(B);
-  free(C);
-  free(D);
-  free(E);
-  free(inter1);
-  free(inter2);
-  free(inter3);
-  free(inter4);
-  free(dummy_a);
-  free(dummy_b);
-  free(dummy_c);
-  printf("Everything is successful\n");
-  return 0;
+
+return 0;
 }   //end of main
 
 double* allocate(int size){
