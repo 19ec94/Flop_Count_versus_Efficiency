@@ -114,15 +114,16 @@ double inter_min_time ;
 
 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n); 
+  
+   
+  for(i=0; i<my_iteration;  i++){
+  cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n); 
   //Path 0 - ((((A*B)*C)*D)*E)
   inter1=reallocate(&inter1,mat_size[0],mat_size[2]);
   inter2=reallocate(&inter2,mat_size[0],mat_size[3]);
   inter3=reallocate(&inter3,mat_size[0],mat_size[4]);
   inter4=reallocate(&inter4,mat_size[0],mat_size[5]);
-   
-  for(i=0; i<my_iteration;  i++){
-  cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n); 
- 
+
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[0],mat_size[2],mat_size[1],1.0,A,mat_size[1],B,mat_size[2],0.0,inter1,mat_size[2]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[0],mat_size[3],mat_size[2],1.0,inter1,mat_size[2],C,mat_size[3],0.0,inter2,mat_size[3]);
@@ -137,16 +138,16 @@ double inter_min_time ;
   if(MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
   
+  
+
+  for(i=0; i<my_iteration;  i++){
+  cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
   //path 1 - ((A*(B*(C *D)))*E)
   inter1=reallocate(&inter1,mat_size[2],mat_size[4]);
   inter2=reallocate(&inter2,mat_size[1],mat_size[4]);
   inter3=reallocate(&inter3,mat_size[0],mat_size[4]);
   inter4=reallocate(&inter4,mat_size[0],mat_size[5]);
 
-
-  for(i=0; i<my_iteration;  i++){
-  cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
- 
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[2],mat_size[4],mat_size[3],1.0,C,mat_size[3],D,mat_size[4],0.0,inter1,mat_size[4]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[1],mat_size[4],mat_size[2],1.0,B,mat_size[2],inter1,mat_size[4],0.0,inter2,mat_size[4]);
@@ -160,16 +161,17 @@ double inter_min_time ;
   if(MATRIX!=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
 
-  //path 2 - (A*(B*(C*(D*E))))
-  inter1=reallocate(&inter1,mat_size[3],mat_size[5]);
-  inter2=reallocate(&inter2,mat_size[2],mat_size[5]);
-  inter3=reallocate(&inter3,mat_size[1],mat_size[5]);
-  inter4=reallocate(&inter4,mat_size[0],mat_size[5]);
+  
 
 
   for(i=0; i<my_iteration;  i++){
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
-  
+  //path 2 - (A*(B*(C*(D*E))))
+  inter1=reallocate(&inter1,mat_size[3],mat_size[5]);
+  inter2=reallocate(&inter2,mat_size[2],mat_size[5]);
+  inter3=reallocate(&inter3,mat_size[1],mat_size[5]);
+  inter4=reallocate(&inter4,mat_size[0],mat_size[5]);  
+
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[3],mat_size[5],mat_size[4],1.0,D,mat_size[4],E,mat_size[5],0.0,inter1,mat_size[5]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[2],mat_size[5],mat_size[3],1.0,C,mat_size[3],inter1,mat_size[5],0.0,inter2,mat_size[5]);
@@ -184,16 +186,17 @@ double inter_min_time ;
   printfunc(inter4,mat_size[0],mat_size[5]);
 
 
-  //path 3 - (A*(((B*C)*D)*E))
-  inter1=reallocate(&inter1,mat_size[1],mat_size[3]);
-  inter2=reallocate(&inter2,mat_size[1],mat_size[4]);
-  inter3=reallocate(&inter3,mat_size[1],mat_size[5]);
-  inter4=reallocate(&inter4,mat_size[0],mat_size[5]);
+  
  
 
   for(i=0; i<my_iteration;  i++){
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
-  
+  //path 3 - (A*(((B*C)*D)*E))
+  inter1=reallocate(&inter1,mat_size[1],mat_size[3]);
+  inter2=reallocate(&inter2,mat_size[1],mat_size[4]);
+  inter3=reallocate(&inter3,mat_size[1],mat_size[5]);
+  inter4=reallocate(&inter4,mat_size[0],mat_size[5]);  
+
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[1],mat_size[3],mat_size[2],1.0,B,mat_size[2],C,mat_size[3],0.0,inter1,mat_size[3]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[1],mat_size[4],mat_size[3],1.0,inter1,mat_size[3],D,mat_size[4],0.0,inter2,mat_size[4]);
@@ -210,16 +213,17 @@ double inter_min_time ;
   printfunc(inter4,mat_size[0],mat_size[5]);
 
   
+  
+
+
+  for(i=0; i<my_iteration;  i++){
+  cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
   //path 4 - (A*((B*C)*(D*E)))
   inter1=reallocate(&inter1,mat_size[1],mat_size[3]);
   inter2=reallocate(&inter2,mat_size[3],mat_size[5]);
   inter3=reallocate(&inter3,mat_size[1],mat_size[5]);
   inter4=reallocate(&inter4,mat_size[0],mat_size[5]);
 
-
-  for(i=0; i<my_iteration;  i++){
-  cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
-  
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[1],mat_size[3],mat_size[2],1.0,B,mat_size[2],C,mat_size[3],0.0,inter1,mat_size[3]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[3],mat_size[5],mat_size[4],1.0,D,mat_size[4],E,mat_size[5],0.0,inter2,mat_size[5]);
@@ -233,6 +237,10 @@ double inter_min_time ;
   if(MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
 
+  
+
+  for(i=0; i<my_iteration;  i++){
+  cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
   //path 5 - (A*(B*((C*D)*E)))  
   inter1=reallocate(&inter1,mat_size[2],mat_size[4]);
   inter2=reallocate(&inter2,mat_size[2],mat_size[5]);
@@ -240,9 +248,6 @@ double inter_min_time ;
   inter4=reallocate(&inter4,mat_size[0],mat_size[5]);
 
 
-  for(i=0; i<my_iteration;  i++){
-  cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
-  
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[2],mat_size[4],mat_size[3],1.0,C,mat_size[3],D,mat_size[4],0.0,inter1,mat_size[4]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[2],mat_size[5],mat_size[4],1.0,inter1,mat_size[4],E,mat_size[5],0.0,inter2,mat_size[5]);
@@ -257,16 +262,17 @@ double inter_min_time ;
   printfunc(inter4,mat_size[0],mat_size[5]);
 
 
+  
+
+  for(i=0; i<my_iteration;  i++){
+  cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
   //path 6 - (A*((B*(C*D))*E))
   inter1=reallocate(&inter1,mat_size[2],mat_size[4]);
   inter2=reallocate(&inter2,mat_size[1],mat_size[4]);
   inter3=reallocate(&inter3,mat_size[1],mat_size[5]);
   inter4=reallocate(&inter4,mat_size[0],mat_size[5]);
-
-
-  for(i=0; i<my_iteration;  i++){
-  cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
   
+
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[2],mat_size[4],mat_size[3],1.0,C,mat_size[3],D,mat_size[4],0.0,inter1,mat_size[4]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[1],mat_size[4],mat_size[2],1.0,B,mat_size[2],inter1,mat_size[4],0.0,inter2,mat_size[4]);
@@ -282,16 +288,17 @@ double inter_min_time ;
   if (MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
 
+  
+
+
+  for(i=0; i<my_iteration;  i++){
+  cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
   //path 7 - ((A*B)(C*(D*E)))
   inter1=reallocate(&inter1,mat_size[0],mat_size[2]);
   inter2=reallocate(&inter2,mat_size[3],mat_size[5]);
   inter3=reallocate(&inter3,mat_size[2],mat_size[5]);
   inter4=reallocate(&inter4,mat_size[0],mat_size[5]);
 
-
-  for(i=0; i<my_iteration;  i++){
-  cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
- 
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[0],mat_size[2],mat_size[1],1.0,A,mat_size[1],B,mat_size[2],0.0,inter1,mat_size[2]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[3],mat_size[5],mat_size[4],1.0,D,mat_size[4],E,mat_size[5],0.0,inter2,mat_size[5]);
@@ -306,15 +313,16 @@ double inter_min_time ;
   printfunc(inter4,mat_size[0],mat_size[5]);
 
 
-  //path 8 - ((A*B)((C*D)*E))
+ 
+
+  for(i=0; i<my_iteration;  i++){
+  cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
+   //path 8 - ((A*B)((C*D)*E))
   inter1=reallocate(&inter1,mat_size[0],mat_size[2]);
   inter2=reallocate(&inter2,mat_size[2],mat_size[4]);
   inter3=reallocate(&inter3,mat_size[2],mat_size[5]);
   inter4=reallocate(&inter4,mat_size[0],mat_size[5]);
 
-  for(i=0; i<my_iteration;  i++){
-  cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
-  
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[0],mat_size[2],mat_size[1],1.0,A,mat_size[1],B,mat_size[2],0.0,inter1,mat_size[2]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[2],mat_size[4],mat_size[3],1.0,C,mat_size[3],D,mat_size[4],0.0,inter2,mat_size[4]);
@@ -328,16 +336,17 @@ double inter_min_time ;
   if(MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
 
+  
+
+
+  for(i=0; i<my_iteration;  i++){
+  cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
   //path 9 - (((A*B)*C)(D*E))  
   inter1=reallocate(&inter1,mat_size[0],mat_size[2]);
   inter2=reallocate(&inter2,mat_size[3],mat_size[5]);
   inter3=reallocate(&inter3,mat_size[0],mat_size[3]);
   inter4=reallocate(&inter4,mat_size[0],mat_size[5]);
 
-
-  for(i=0; i<my_iteration;  i++){
-  cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
-  
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[0],mat_size[2],mat_size[1],1.0,A,mat_size[1],B,mat_size[2],0.0,inter1,mat_size[2]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[3],mat_size[5],mat_size[4],1.0,D,mat_size[4],E,mat_size[5],0.0,inter2,mat_size[5]);
@@ -351,16 +360,17 @@ double inter_min_time ;
   if(MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
 
+  
+
+
+  for(i=0; i<my_iteration;  i++){
+  cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
   //path 10 - ((A*(B*C))*(D*E))
   inter1=reallocate(&inter1,mat_size[1],mat_size[3]);
   inter2=reallocate(&inter2,mat_size[3],mat_size[5]);
   inter3=reallocate(&inter3,mat_size[0],mat_size[3]);
   inter4=reallocate(&inter4,mat_size[0],mat_size[5]);
 
-
-  for(i=0; i<my_iteration;  i++){
-  cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
-  
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[1],mat_size[3],mat_size[2],1.0,B,mat_size[2],C,mat_size[3],0.0,inter1,mat_size[3]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[3],mat_size[5],mat_size[4],1.0,D,mat_size[4],E,mat_size[5],0.0,inter2,mat_size[5]);
@@ -374,16 +384,18 @@ double inter_min_time ;
   if(MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
 
+  
+
+
+  for(i=0; i<my_iteration;  i++){
+  cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
+  
   //path 11 - (((A*(B*C))*D)*E)
   inter1=reallocate(&inter1,mat_size[1],mat_size[3]);
   inter2=reallocate(&inter2,mat_size[0],mat_size[3]);
   inter3=reallocate(&inter3,mat_size[0],mat_size[4]);
   inter4=reallocate(&inter4,mat_size[0],mat_size[5]);
 
-
-  for(i=0; i<my_iteration;  i++){
-  cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
-  
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[1],mat_size[3],mat_size[2],1.0,B,mat_size[2],C,mat_size[3],0.0,inter1,mat_size[3]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[0],mat_size[3],mat_size[1],1.0,A,mat_size[1],inter1,mat_size[3],0.0,inter2,mat_size[3]);
@@ -397,16 +409,16 @@ double inter_min_time ;
   if(MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
 
+  
+
+  for(i=0; i<my_iteration;  i++){
+  cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
   //path 12 - ((A*((B*C)*D))*E)
   inter1=reallocate(&inter1,mat_size[1],mat_size[3]);
   inter2=reallocate(&inter2,mat_size[1],mat_size[4]);
   inter3=reallocate(&inter3,mat_size[0],mat_size[4]);
   inter4=reallocate(&inter4,mat_size[0],mat_size[5]);
 
-
-  for(i=0; i<my_iteration;  i++){
-  cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
- 
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[1],mat_size[3],mat_size[2],1.0,B,mat_size[2],C,mat_size[3],0.0,inter1,mat_size[3]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[1],mat_size[4],mat_size[3],1.0,inter1,mat_size[3],D,mat_size[4],0.0,inter2,mat_size[4]);
@@ -420,16 +432,17 @@ double inter_min_time ;
   if(MATRIX !=0)
   printfunc(inter4,mat_size[0],mat_size[5]);
 
+  
+
+
+  for(i=0; i<my_iteration;  i++){
+  cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
   //path 13 - (((A*B)*(C*D))*E)
   inter1=reallocate(&inter1,mat_size[0],mat_size[2]);
   inter2=reallocate(&inter2,mat_size[2],mat_size[4]);
   inter3=reallocate(&inter3,mat_size[0],mat_size[4]);
   inter4=reallocate(&inter4,mat_size[0],mat_size[5]);
 
-
-  for(i=0; i<my_iteration;  i++){
-  cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,m,n,k,1.0,dummy_a,k,dummy_b,n,0.0,dummy_c,n);
- 
   gettimeofday(&start, NULL); 
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[0],mat_size[2],mat_size[1],1.0,A,mat_size[1],B,mat_size[2],0.0,inter1,mat_size[2]);
   cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,mat_size[2],mat_size[4],mat_size[3],1.0,C,mat_size[3],D,mat_size[4],0.0,inter2,mat_size[4]);
